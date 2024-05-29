@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -68,3 +69,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+=======
+# client-tad-g4
+Frontend desarrollado en React para el proyecto de Taller de Sistemas Distribuidos: "Sistema Web de registro de proyectos de investigación en la UNMSM".
+>>>>>>> 4013e7b93b592f39d53aee73a6e4928c1c04479a

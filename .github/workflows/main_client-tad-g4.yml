@@ -67,5 +67,5 @@ jobs:
         with:
           app-name: 'client-tad-g4'
           slot-name: 'Production'
-          package: .
+          package: ./build
           

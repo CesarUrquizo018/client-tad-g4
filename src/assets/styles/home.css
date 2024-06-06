@@ -1,0 +1,42 @@
+/* home.css */
+.titulo-proyecto{
+    text-align: center;
+    margin-top: 50px; /* Añadir margen superior para centrar verticalmente */
+  }
+  
+  body {
+    background-color: #ffffff;
+    font-family: Arial, sans-serif;
+  }
+  
+  .project-table table {
+    width: 80%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .project-table th,
+  .project-table td {
+    padding: 12px;
+    text-align: left;
+  }
+  
+  .project-table th {
+    background-color: #444;
+    color: #fff;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  
+  .project-table td {
+    background-color: #ffffff;
+    color: #333;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .project-table tbody tr:hover {
+    background-color: #ffffff;
+  }

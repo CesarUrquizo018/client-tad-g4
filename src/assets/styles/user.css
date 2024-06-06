@@ -1,0 +1,92 @@
+/* user.css */
+
+/* Estilos para el contenedor principal */
+.user-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+  
+.titulo{
+    font-size: 50px;
+    font-weight: bold;
+}
+
+/* Estilos para la lista de navegación */
+.user-container nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+  
+.user-container nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+  
+/* Estilos para los enlaces de navegación */
+.user-container nav ul li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+  
+.user-container nav ul li a:hover {
+    color: #555;
+}
+  
+/* Estilos para el encabezado */
+.user-container h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.user-info {
+    display: flex;
+  }
+
+/* Estilos para las etiquetas de información del usuario */
+.user-info-label {
+    font-weight: bold;
+    min-width: 150px; /* Establece un ancho mínimo para mantener la alineación */
+    font-size: 20px;
+  }
+  
+.user-info-value {
+    flex-grow: 0.1; /* Hace que los valores se expandan para ocupar el espacio disponible */
+    font-size: 20px;
+    line-height: 30px; /* Aumenta la altura de línea al 150% del tamaño del texto */
+}
+  
+.botonContrasena{
+    flex-grow: 0.1; /* Hace que los valores se expandan para ocupar el espacio disponible */
+    font-size: 20px;
+    line-height: 30px; /* Aumenta la altura de línea al 150% del tamaño del texto */
+}
+
+.botonEditar{
+    flex-grow: 0.1; /* Hace que los valores se expandan para ocupar el espacio disponible */
+    font-size: 20px;
+    line-height: 30px; /* Aumenta la altura de línea al 150% del tamaño del texto */
+    background-color: #4a9b50;
+}
+
+/* Estilos para la foto de perfil */
+.user-profile-pic {
+    max-width: 200px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
+
+/* Estilos para los enlaces con la clase .enlace fuera del contenedor principal */
+.enlace {
+    text-decoration: none; /* Sin subrayado */
+    color: #007bff; /* Color azul típico de los enlaces */
+    font-weight: bold; /* Texto en negrita */
+    transition: color 0.3s ease; /* Transición suave del color al hacer hover */
+  }
+  
+  .enlace:hover {
+    color: #0056b3; /* Cambia el color al hacer hover */
+  }
+  

@@ -1,0 +1,85 @@
+/* details_project_page.css */
+
+/* Estilos para el contenedor principal */
+.project-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.titulo {
+    font-size: 50px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Estilos para la lista de navegación */
+.project-container nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.project-container nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+/* Estilos para los enlaces de navegación */
+.project-container nav ul li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+.project-container nav ul li a:hover {
+    color: #555;
+}
+
+/* Estilos generales de texto y secciones */
+.project-container p, .project-container ul {
+    font-size: 20px;
+    line-height: 30px;
+}
+
+.resources-list li {
+    background-color: #f4f4f9;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    list-style-type: none;
+}
+
+/* Botones y enlaces especiales */
+.link-button, .project-container a {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.link-button:hover, .project-container a:hover {
+    background-color: #45a049;
+}
+
+.enlace {
+    text-decoration: none; /* Sin subrayado */
+    color: #007bff; /* Color azul típico de los enlaces */
+    font-weight: bold; /* Texto en negrita */
+    transition: color 0.3s ease; /* Transición suave del color al hacer hover */
+}
+
+.project-info-label {
+    font-weight: bold;
+    min-width: 150px; /* Establece un ancho mínimo para mantener la alineación */
+    font-size: 20px;
+  }
+  
+.project-info-value {
+    flex-grow: 0.1; /* Hace que los valores se expandan para ocupar el espacio disponible */
+    font-size: 20px;
+    line-height: 30px; /* Aumenta la altura de línea al 150% del tamaño del texto */
+}

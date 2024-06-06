@@ -1,0 +1,67 @@
+/* create_project.css */
+
+/* Estilos para el contenedor principal */
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Estilos para el título */
+  h1 {
+    
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* Estilos para el formulario */
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Estilos para los campos de entrada */
+  input,
+  textarea {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  /* Estilos para el botón de enviar */
+  button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: true;
+    border-color: #000000;
+    border-radius: 3px;
+    cursor: pointer;  
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #294564;
+  }
+  
+  /* Estilos para el botón de regresar */
+  .btn-regresar {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: true;
+    border-color: #000000;
+    border-radius: 3px;
+    cursor: pointer;  
+  }
+  
+  .btn-regresar:hover {
+    background-color: #294564;
+  }
+  

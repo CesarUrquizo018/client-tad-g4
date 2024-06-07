@@ -1,5 +1,4 @@
-// src/pages/RequestPage.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { useUser } from '../context/UserContext';
 import { formatDate } from '../utils/DateUtils';
@@ -15,7 +14,7 @@ function RequestPage() {
   const [acceptedRequests, setAcceptedRequests] = useState([]);
   const [rejectedRequests, setRejectedRequests] = useState([]);
 
-  const obtenerSolicitudes = async () => {
+  const obtenerSolicitudes = useCallback(async () => {
     try {
       const response = await axios.get('http://localhost:8080/api/solicitudes');
       if (response.status === 200) {
@@ -29,16 +28,19 @@ function RequestPage() {
     } catch (error) {
       console.error('Error al obtener las solicitudes:', error);
     }
-  };
+  }, [user]);
 
   useEffect(() => {
-    obtenerSolicitudes();
+    if (user) {
+      obtenerSolicitudes();
+    }
+
     document.body.style.backgroundColor = '#343a40';  // Aplica el fondo oscuro
 
     return () => {
       document.body.style.backgroundColor = '';  // Restablece al estilo predeterminado al salir
     };
-  }, [user,obtenerSolicitudes]);
+  }, [user, obtenerSolicitudes]);
 
   const handleAccept = async (id) => {
     try {

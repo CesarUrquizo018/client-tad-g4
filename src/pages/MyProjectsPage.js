@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { formatDate } from '../utils/DateUtils';
@@ -17,7 +17,7 @@ function MyProjectsPage() {
   const [proyectos, setProyectos] = useState([]);
   const navigate = useNavigate();
 
-  const obtenerProyectos = async () => {
+  const obtenerProyectos = useCallback(async () => {
     try {
       const response = await axios.get(`http://localhost:8080/api/proyectos/mis-proyectos/${user.id_usuario}`);
       if (response.status === 200) {
@@ -28,17 +28,17 @@ function MyProjectsPage() {
     } catch (error) {
       console.error('Error al obtener los proyectos:', error);
     }
-  };
+  }, [user]);
 
   useEffect(() => {
     if (user) {
       obtenerProyectos();
     }
-    
+
     document.body.style.backgroundColor = '#343a40';  // Aplica el fondo oscuro
 
     return () => {
-        document.body.style.backgroundColor = '';  // Restablece al estilo predeterminado al salir
+      document.body.style.backgroundColor = '';  // Restablece al estilo predeterminado al salir
     };
   }, [user, obtenerProyectos]);
 

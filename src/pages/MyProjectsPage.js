@@ -17,17 +17,6 @@ function MyProjectsPage() {
   const [proyectos, setProyectos] = useState([]);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (user) {
-      obtenerProyectos();
-    }
-    document.body.style.backgroundColor = '#343a40';  // Aplica el fondo oscuro
-
-    return () => {
-        document.body.style.backgroundColor = '';  // Restablece al estilo predeterminado al salir
-    };
-  }, [user]);
-
   const obtenerProyectos = async () => {
     try {
       const response = await axios.get(`http://localhost:8080/api/proyectos/mis-proyectos/${user.id_usuario}`);
@@ -40,6 +29,18 @@ function MyProjectsPage() {
       console.error('Error al obtener los proyectos:', error);
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      obtenerProyectos();
+    }
+    
+    document.body.style.backgroundColor = '#343a40';  // Aplica el fondo oscuro
+
+    return () => {
+        document.body.style.backgroundColor = '';  // Restablece al estilo predeterminado al salir
+    };
+  }, [user, obtenerProyectos]);
 
   const confirmarYBorrarProyecto = (id) => {
     if (window.confirm('¿Estás seguro de que deseas eliminar este proyecto?')) {

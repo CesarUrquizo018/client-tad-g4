@@ -15,15 +15,6 @@ function RequestPage() {
   const [acceptedRequests, setAcceptedRequests] = useState([]);
   const [rejectedRequests, setRejectedRequests] = useState([]);
 
-  useEffect(() => {
-    obtenerSolicitudes();
-    document.body.style.backgroundColor = '#343a40';  // Aplica el fondo oscuro
-
-    return () => {
-      document.body.style.backgroundColor = '';  // Restablece al estilo predeterminado al salir
-    };
-  }, [user]);
-
   const obtenerSolicitudes = async () => {
     try {
       const response = await axios.get('http://localhost:8080/api/solicitudes');
@@ -39,6 +30,15 @@ function RequestPage() {
       console.error('Error al obtener las solicitudes:', error);
     }
   };
+
+  useEffect(() => {
+    obtenerSolicitudes();
+    document.body.style.backgroundColor = '#343a40';  // Aplica el fondo oscuro
+
+    return () => {
+      document.body.style.backgroundColor = '';  // Restablece al estilo predeterminado al salir
+    };
+  }, [user,obtenerSolicitudes]);
 
   const handleAccept = async (id) => {
     try {

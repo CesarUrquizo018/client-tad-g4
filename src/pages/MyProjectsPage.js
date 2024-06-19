@@ -16,18 +16,6 @@ function MyProjectsPage() {
   const [proyectos, setProyectos] = useState([]);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (user) {
-      console.log('User object:', user);  // Debugging
-      obtenerProyectos();
-    }
-    document.body.style.backgroundColor = '#343a40';
-
-    return () => {
-      document.body.style.backgroundColor = '';
-    };
-  }, [user]);
-
   const obtenerProyectos = async () => {
     try {
       const response = await axios.get(`https://server-tad-g4.azurewebsites.net/api/proyectos/mis-proyectos/${user.id_usuario}`);
@@ -42,6 +30,18 @@ function MyProjectsPage() {
     }
   };
 
+  useEffect(() => {
+    if (user) {
+      console.log('User object:', user);  // Debugging
+      obtenerProyectos();
+    }
+    document.body.style.backgroundColor = '#343a40';
+
+    return () => {
+      document.body.style.backgroundColor = '';
+    };
+  }, [user, obtenerProyectos]);
+  
   const confirmarYBorrarProyecto = (id) => {
     if (window.confirm('¿Estás seguro de que deseas eliminar este proyecto?')) {
       borrarProyecto(id);

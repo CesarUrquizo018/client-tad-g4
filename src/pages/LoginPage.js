@@ -29,7 +29,7 @@ function LoginPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8080/api/auth/login', { email, contrasena });
+            const response = await axios.post(`https://server-tad-g4.azurewebsites.net/api/auth/login`, { email, contrasena });
             const { usuario, token } = response.data;
 
             loginUser(usuario, token);

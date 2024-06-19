@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import { formatDate } from '../utils/DateUtils';
 import { useUser } from '../context/UserContext';
 import Header from '../components/Header';
@@ -25,7 +24,7 @@ function HomePage() {
 
   const obtenerProyectos = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/proyectos`);
+      const response = await axios.get(`https://server-tad-g4.azurewebsites.net/api/proyectos`);
       if (response.status === 200) {
         setProyectos(response.data);
       } else {
@@ -46,7 +45,7 @@ function HomePage() {
         mensaje: "Solicitud enviada"
       };
 
-      const response = await axios.post('http://localhost:8080/api/solicitudes', nuevaSolicitud);
+      const response = await axios.post(`https://server-tad-g4.azurewebsites.net/api/solicitudes`, nuevaSolicitud);
       if (response.status === 201) {
         alert('Solicitud enviada exitosamente');
       } else {

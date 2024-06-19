@@ -19,7 +19,7 @@ function RequestPage() {
 
   const obtenerSolicitudes = useCallback(async () => {
     try {
-      const response = await axios.get('http://localhost:3000/api/solicitudes');
+      const response = await axios.get(`https://server-tad-g4.azurewebsites.net/api/solicitudes`);
       if (response.status === 200) {
         const userReceivedRequests = response.data.filter(solicitud => solicitud.id_proyecto_owner === user.id_usuario);
         const userSentRequests = response.data.filter(solicitud => solicitud.id_usuario === user.id_usuario);
@@ -50,7 +50,7 @@ function RequestPage() {
 
   const handleAccept = async (id) => {
     try {
-      await axios.post(`http://localhost:3000/api/solicitudes/${id}/accept`);
+      await axios.post(`https://server-tad-g4.azurewebsites.net/api/solicitudes/${id}/accept`);
       obtenerSolicitudes();
     } catch (error) {
       console.error('Error al aceptar la solicitud', error);
@@ -59,7 +59,7 @@ function RequestPage() {
 
   const handleReject = async (id) => {
     try {
-      await axios.post(`http://localhost:3000/api/solicitudes/${id}/reject`);
+      await axios.post(`https://server-tad-g4.azurewebsites.net/api/solicitudes/${id}/reject`);
       obtenerSolicitudes();
     } catch (error) {
       console.error('Error al rechazar la solicitud', error);

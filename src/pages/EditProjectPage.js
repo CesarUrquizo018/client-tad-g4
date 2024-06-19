@@ -19,7 +19,7 @@ function EditProjectPage() {
   useEffect(() => {
     const fetchProyecto = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/proyectos/${id}`);
+        const response = await axios.get(`https://server-tad-g4.azurewebsites.net/api/proyectos/${id}`);
         const { titulo, descripcion, ciclo, curso } = response.data;
         setTitulo(titulo);
         setDescripcion(descripcion);
@@ -41,7 +41,7 @@ function EditProjectPage() {
     e.preventDefault();
     try {
       const proyecto = { titulo, descripcion, ciclo, curso };
-      await axios.put(`http://localhost:8080/api/proyectos/${id}`, proyecto);
+      await axios.put(`https://server-tad-g4.azurewebsites.net/api/proyectos/${id}`, proyecto);
       navigate('/myprojects'); // Redirigir al usuario a la lista de sus proyectos después de actualizar
     } catch (error) {
       console.error('Error al actualizar el proyecto:', error);

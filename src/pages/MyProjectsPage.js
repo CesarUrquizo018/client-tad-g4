@@ -18,6 +18,7 @@ function MyProjectsPage() {
 
   useEffect(() => {
     if (user) {
+      console.log('User object:', user);  // Debugging
       obtenerProyectos();
     }
     document.body.style.backgroundColor = '#343a40';
@@ -29,7 +30,8 @@ function MyProjectsPage() {
 
   const obtenerProyectos = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/proyectos/mis-proyectos/${user.id_usuario}`);
+      const response = await axios.get(`https://server-tad-g4.azurewebsites.net/api/proyectos/mis-proyectos/${user.id_usuario}`);
+      console.log('API response:', response.data);  // Debugging
       if (response.status === 200) {
         setProyectos(response.data);
       } else {
@@ -48,7 +50,7 @@ function MyProjectsPage() {
 
   const borrarProyecto = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:3000/api/proyectos/${id}`);
+      const response = await axios.delete(`https://server-tad-g4.azurewebsites.net/api/proyectos/${id}`);
       if (response.status === 200) {
         setProyectos(proyectos.filter(proyecto => proyecto.id_proyecto !== id));
         alert('Proyecto eliminado exitosamente.');

@@ -31,7 +31,7 @@ function CreateUserPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8080/api/auth/register', {
+            const response = await axios.post(`https://server-tad-g4.azurewebsites.net/api/auth/register`, {
                 nombre: username,
                 codigo: codigo,
                 email: email,

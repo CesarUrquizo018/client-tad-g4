@@ -37,7 +37,7 @@ function CreateProjectPage() {
                 id_usuario: user.id_usuario
             };
 
-            const response = await axios.post('http://localhost:8080/api/proyectos', proyecto);
+            const response = await axios.post(`https://server-tad-g4.azurewebsites.net/api/proyectos`, proyecto);
             if (response.status === 201) {
                 navigate('/myprojects');
             } else {

@@ -41,7 +41,7 @@ function MyProjectsPage() {
       document.body.style.backgroundColor = '';
     };
   }, [user, obtenerProyectos]);
-  
+
   const confirmarYBorrarProyecto = (id) => {
     if (window.confirm('¿Estás seguro de que deseas eliminar este proyecto?')) {
       borrarProyecto(id);

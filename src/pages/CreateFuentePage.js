@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect} from 'react';
 import axios from 'axios';
-import { Link, useNavigate,useParams } from 'react-router-dom';
+import { useNavigate,useParams } from 'react-router-dom';
 
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';

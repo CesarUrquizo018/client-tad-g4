@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { formatDate } from '../utils/DateUtils';
@@ -16,7 +16,7 @@ function MyProjectsPage() {
   const [proyectos, setProyectos] = useState([]);
   const navigate = useNavigate();
 
-  const obtenerProyectos = async () => {
+  const obtenerProyectos = useCallback(async () => {
     try {
       const response = await axios.get(`https://server-tad-g4.azurewebsites.net/api/proyectos/mis-proyectos/${user.id_usuario}`);
       console.log('API response:', response.data);  // Debugging
@@ -28,7 +28,7 @@ function MyProjectsPage() {
     } catch (error) {
       console.error('Error al obtener los proyectos:', error);
     }
-  };
+  }, [user.id_usuario]);
 
   useEffect(() => {
     if (user) {

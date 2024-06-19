@@ -38,11 +38,11 @@ const App = () => {
           <Route path="/edit-project/:id" element={<PrivateRoute element={EditProjectPage} />} />
           <Route path="/project-details/:id" element={<DetailsProjectPage />} />
           <Route path="/requests" element={<PrivateRoute element={RequestPage} />} /> 
-          <Route path="/create-fuente/:id" element={<PrivateRoute element={CreateFuentePage} />} />
           <Route path="/create-anotacion/:id" element={<PrivateRoute element={CreateAnotacionPage} />} />
+          <Route path="/create-fuente/:id" element={<PrivateRoute element={CreateFuentePage} />} />
           <Route path="/create-otro/:id" element={<PrivateRoute element={CreateOtroPage} />} />
-          <Route path="/details-fuente/:id" element={<PrivateRoute element={DetailsFuente} />} />
           <Route path="/details-anotacion/:id" element={<PrivateRoute element={DetailsAnotacion} />} />
+          <Route path="/details-fuente/:id" element={<PrivateRoute element={DetailsFuente} />} />
           <Route path="/details-otro/:id" element={<PrivateRoute element={DetailsOtro} />} />
         </Routes>
       </Router>

@@ -3,13 +3,12 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { formatDate } from '../utils/DateUtils';
 import { useUser } from '../context/UserContext';
+import Header from '../components/Header';
 
 import Container from 'react-bootstrap/Container';
 import Table from 'react-bootstrap/Table';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
 
 function HomePage() {
   const { user } = useUser();
@@ -17,12 +16,12 @@ function HomePage() {
 
   useEffect(() => {
     obtenerProyectos();
-    document.body.style.backgroundColor = '#343a40';  // Aplica el fondo oscuro
+    document.body.style.backgroundColor = '#343a40';
 
     return () => {
-      document.body.style.backgroundColor = '';  // Restablece al estilo predeterminado al salir
+      document.body.style.backgroundColor = '';
     };
-  }, []); // La dependencia vacía asegura que este efecto se ejecute solo una vez cuando el componente se monta
+  }, []);
 
   const obtenerProyectos = async () => {
     try {
@@ -60,20 +59,11 @@ function HomePage() {
 
   return (
     <Container className="mt-4 bg-dark text-white">
-      <Navbar bg="dark" variant="dark" expand="lg" className="mb-3">
-        <Nav className="me-auto">
-          <Nav.Link as={Link} to="/home" active className="bg-primary">Home</Nav.Link>
-          <Nav.Link as={Link} to="/user">User</Nav.Link>
-          <Nav.Link as={Link} to="/myprojects">Mis Proyectos</Nav.Link>
-          <Nav.Link as={Link} to="/requests">Mis mensajes</Nav.Link> {/* Update this link */}
-          <Nav.Link as={Link} to="/">Salir</Nav.Link>
-        </Nav>
-      </Navbar>
-
-      <h1 className="mb-4">Proyectos</h1>
+      <Header />
+      <h1 className="mb-4 text-white">Proyectos</h1>
       {proyectos.map(proyecto => (
-        <Card key={proyecto.id_proyecto} className="mb-3">
-          <Card.Body>
+        <Card key={proyecto.id_proyecto} className="mb-3" >
+          <Card.Body >
             <Card.Title>{proyecto.titulo}</Card.Title>
             <Card.Text>
               {proyecto.descripcion}
@@ -98,8 +88,7 @@ function HomePage() {
                 </tr>
               </tbody>
             </Table>
-            <Button variant="primary" onClick={() => enviarSolicitud(proyecto.id_proyecto)}>ENVIAR SOLICITUD</Button>
-          </Card.Body>
+            <Button variant="primary" onClick={() => enviarSolicitud(proyecto.id_proyecto)}>ENVIAR SOLICITUD</Button>          </Card.Body>
         </Card>
       ))}
     </Container>

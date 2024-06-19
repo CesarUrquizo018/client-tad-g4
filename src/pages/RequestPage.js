@@ -2,31 +2,37 @@ import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { useUser } from '../context/UserContext';
 import { formatDate } from '../utils/DateUtils';
+import Header from '../components/Header';
 
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import Header from '../components/Header';
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
+
 
 function RequestPage() {
   const { user } = useUser();
-  const [solicitudes, setSolicitudes] = useState([]);
-  const [acceptedRequests, setAcceptedRequests] = useState([]);
-  const [rejectedRequests, setRejectedRequests] = useState([]);
+  const [receivedRequests, setReceivedRequests] = useState([]);
+  const [sentRequests, setSentRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const obtenerSolicitudes = useCallback(async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/solicitudes');
+      const response = await axios.get('http://localhost:3000/api/solicitudes');
       if (response.status === 200) {
-        const userSolicitudes = response.data.filter(solicitud => solicitud.id_usuario === user.id_usuario);
-        setSolicitudes(userSolicitudes.filter(solicitud => solicitud.id_estado === 1));
-        setAcceptedRequests(userSolicitudes.filter(solicitud => solicitud.id_estado === 2));
-        setRejectedRequests(userSolicitudes.filter(solicitud => solicitud.id_estado === 3));
+        const userReceivedRequests = response.data.filter(solicitud => solicitud.id_proyecto_owner === user.id_usuario);
+        const userSentRequests = response.data.filter(solicitud => solicitud.id_usuario === user.id_usuario);
+
+        setReceivedRequests(userReceivedRequests);
+        setSentRequests(userSentRequests);
       } else {
         console.error('Error al obtener las solicitudes');
       }
     } catch (error) {
       console.error('Error al obtener las solicitudes:', error);
+    } finally {
+      setLoading(false);
     }
   }, [user]);
 
@@ -35,103 +41,99 @@ function RequestPage() {
       obtenerSolicitudes();
     }
 
-    document.body.style.backgroundColor = '#343a40';  // Aplica el fondo oscuro
+    document.body.style.backgroundColor = '#343a40';
 
     return () => {
-      document.body.style.backgroundColor = '';  // Restablece al estilo predeterminado al salir
+      document.body.style.backgroundColor = '';
     };
   }, [user, obtenerSolicitudes]);
 
   const handleAccept = async (id) => {
     try {
-      await axios.post(`http://localhost:8080/api/solicitudes/${id}/accept`);
-      obtenerSolicitudes(); // Update requests
+      await axios.post(`http://localhost:3000/api/solicitudes/${id}/accept`);
+      obtenerSolicitudes();
     } catch (error) {
-      console.error('Error accepting request', error);
+      console.error('Error al aceptar la solicitud', error);
     }
   };
 
   const handleReject = async (id) => {
     try {
-      await axios.post(`http://localhost:8080/api/solicitudes/${id}/reject`);
-      obtenerSolicitudes(); // Update requests
+      await axios.post(`http://localhost:3000/api/solicitudes/${id}/reject`);
+      obtenerSolicitudes();
     } catch (error) {
-      console.error('Error rejecting request', error);
+      console.error('Error al rechazar la solicitud', error);
     }
   };
 
   return (
     <Container className="mt-4 bg-dark text-white">
       <Header />
-
-      <h1 className="mb-4">Solicitudes Pendientes</h1>
-      {solicitudes.length === 0 ? (
-        <p>No se registran solicitudes pendientes</p>
+      {loading ? (
+        <p>Cargando...</p>
       ) : (
-        solicitudes.map(solicitud => (
-          <Card key={solicitud.id_solicitud} className="mb-3">
-            <Card.Body>
-              <Card.Title>Solicitud ID: {solicitud.id_solicitud}</Card.Title>
-              <Card.Text>
-                <strong>Mensaje:</strong> {solicitud.mensaje}
-              </Card.Text>
-              <Card.Text>
-                <strong>Fecha de Solicitud:</strong> {formatDate(solicitud.fecha_solicitud)}
-              </Card.Text>
-              <Card.Text>
-                <strong>Estado:</strong> {solicitud.id_estado === 2 ? 'Aceptado' : solicitud.id_estado === 3 ? 'Rechazado' : 'En espera'}
-              </Card.Text>
-              <div className="d-flex justify-content-end">
-                <Button variant="success" size="sm" className="me-2" onClick={() => handleAccept(solicitud.id_solicitud)}>Aceptar</Button>
-                <Button variant="danger" size="sm" onClick={() => handleReject(solicitud.id_solicitud)}>Rechazar</Button>
-              </div>
-            </Card.Body>
-          </Card>
-        ))
-      )}
-
-      <h1 className="mb-4">Solicitudes Aceptadas</h1>
-      {acceptedRequests.length === 0 ? (
-        <p>No se registran solicitudes aceptadas</p>
-      ) : (
-        acceptedRequests.map(solicitud => (
-          <Card key={solicitud.id_solicitud} className="mb-3">
-            <Card.Body>
-              <Card.Title>Solicitud ID: {solicitud.id_solicitud}</Card.Title>
-              <Card.Text>
-                <strong>Mensaje:</strong> {solicitud.mensaje}
-              </Card.Text>
-              <Card.Text>
-                <strong>Fecha de Solicitud:</strong> {formatDate(solicitud.fecha_solicitud)}
-              </Card.Text>
-              <Card.Text>
-                <strong>Estado:</strong> Aceptado
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        ))
-      )}
-
-      <h1 className="mb-4">Solicitudes Rechazadas</h1>
-      {rejectedRequests.length === 0 ? (
-        <p>No se registran solicitudes rechazadas</p>
-      ) : (
-        rejectedRequests.map(solicitud => (
-          <Card key={solicitud.id_solicitud} className="mb-3">
-            <Card.Body>
-              <Card.Title>Solicitud ID: {solicitud.id_solicitud}</Card.Title>
-              <Card.Text>
-                <strong>Mensaje:</strong> {solicitud.mensaje}
-              </Card.Text>
-              <Card.Text>
-                <strong>Fecha de Solicitud:</strong> {formatDate(solicitud.fecha_solicitud)}
-              </Card.Text>
-              <Card.Text>
-                <strong>Estado:</strong> Rechazado
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        ))
+        <Tabs defaultActiveKey="received" className="mb-3">
+          <Tab eventKey="received" title="Recibidas">
+            <h1 className="mb-4">Solicitudes Recibidas</h1>
+            {receivedRequests.length === 0 ? (
+              <p>No tienes solicitudes pendientes</p>
+            ) : (
+              receivedRequests.map(solicitud => (
+                <Card key={solicitud.id_solicitud} className="mb-3">
+                  <Card.Body>
+                    <Card.Title>Solicitud ID: {solicitud.id_solicitud}</Card.Title>
+                    <Card.Text><strong>Proyecto:</strong> {solicitud.proyecto_titulo}</Card.Text>
+                    <Card.Text><strong>Mensaje:</strong> {solicitud.mensaje}</Card.Text>
+                    <Card.Text><strong>Fecha de Solicitud:</strong> {formatDate(solicitud.fecha_solicitud)}</Card.Text>
+                    <Card.Text><strong>Estado:</strong> {solicitud.id_estado === 2 ? 'Aceptado' : solicitud.id_estado === 3 ? 'Rechazado' : 'En espera'}</Card.Text>
+                    {solicitud.id_estado === 1 && (
+                      <div className="d-flex justify-content-end">
+                        <Button variant="success" size="sm" className="me-2" onClick={() => handleAccept(solicitud.id_solicitud)}>Aceptar</Button>
+                        <Button variant="danger" size="sm" onClick={() => handleReject(solicitud.id_solicitud)}>Rechazar</Button>
+                      </div>
+                    )}
+                  </Card.Body>
+                </Card>
+              ))
+            )}
+          </Tab>
+          <Tab eventKey="sent" title="Enviadas">
+            <h1 className="mb-4">Mis Solicitudes Enviadas</h1>
+            {sentRequests.length === 0 ? (
+              <p>No has enviado ninguna solicitud</p>
+            ) : (
+              sentRequests.map(solicitud => (
+                <Card key={solicitud.id_solicitud} className="mb-3">
+                  <Card.Body>
+                    <Card.Title>Solicitud ID: {solicitud.id_solicitud}</Card.Title>
+                    <Card.Text><strong>Proyecto:</strong> {solicitud.proyecto_titulo}</Card.Text>
+                    <Card.Text><strong>Mensaje:</strong> {solicitud.mensaje}</Card.Text>
+                    <Card.Text><strong>Fecha de Solicitud:</strong> {formatDate(solicitud.fecha_solicitud)}</Card.Text>
+                    <Card.Text><strong>Estado:</strong> {solicitud.id_estado === 2 ? 'Aceptado' : solicitud.id_estado === 3 ? 'Rechazado' : 'En espera'}</Card.Text>
+                  </Card.Body>
+                </Card>
+              ))
+            )}
+          </Tab>
+          <Tab eventKey="history" title="Historial">
+            <h1 className="mb-4">Historial de Solicitudes</h1>
+            {receivedRequests.concat(sentRequests).filter(solicitud => solicitud.id_estado !== 1).length === 0 ? (
+              <p>No hay historial de solicitudes</p>
+            ) : (
+              receivedRequests.concat(sentRequests).filter(solicitud => solicitud.id_estado !== 1).map(solicitud => (
+                <Card key={solicitud.id_solicitud} className="mb-3">
+                  <Card.Body>
+                    <Card.Title>Solicitud ID: {solicitud.id_solicitud}</Card.Title>
+                    <Card.Text><strong>Proyecto:</strong> {solicitud.proyecto_titulo}</Card.Text>
+                    <Card.Text><strong>Mensaje:</strong> {solicitud.mensaje}</Card.Text>
+                    <Card.Text><strong>Fecha de Solicitud:</strong> {formatDate(solicitud.fecha_solicitud)}</Card.Text>
+                    <Card.Text><strong>Estado:</strong> {solicitud.id_estado === 2 ? 'Aceptado' : 'Rechazado'}</Card.Text>
+                  </Card.Body>
+                </Card>
+              ))
+            )}
+          </Tab>
+        </Tabs>
       )}
     </Container>
   );

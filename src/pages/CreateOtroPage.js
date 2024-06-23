@@ -7,7 +7,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
 function CreateOtroPage() {
-    const { id } = useParams(); // ID del proyecto al que se añadirá el recurso 'Otro'
+    const { id } = useParams(); 
     const navigate = useNavigate();
     
     const [nombreOtro, setNombreOtro] = useState('');
@@ -22,7 +22,7 @@ function CreateOtroPage() {
                 id_proyecto: id
             };
             await axios.post(`https://server-tad-g4.azurewebsites.net/api/otro`, otroData);
-            navigate(`/project-details/${id}`); // Redirigir al detalle del proyecto después de crear el recurso 'Otro'
+            navigate(`/project-details/${id}`); 
         } catch (error) {
             console.error('Error al crear el recurso Otro:', error);
             alert('Error al crear el recurso Otro');

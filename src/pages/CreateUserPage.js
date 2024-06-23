@@ -21,10 +21,10 @@ function CreateUserPage() {
     const defaultProfilePhoto = `${username}.jpg`;
 
     useEffect(() => {
-        document.body.style.backgroundColor = '#343a40';  // Aplica el fondo oscuro
+        document.body.style.backgroundColor = '#343a40';
 
         return () => {
-            document.body.style.backgroundColor = '';  // Restablece al estilo predeterminado al salir
+            document.body.style.backgroundColor = ''; 
         };
     }, []);
 

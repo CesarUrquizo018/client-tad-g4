@@ -50,7 +50,7 @@ function EditUserPage() {
         e.preventDefault();
         try {
             await axios.put(`https://server-tad-g4.azurewebsites.net/api/usuarios/${id}`, usuarioContexto);
-            loginUser(usuarioContexto);  // Actualizar el estado global del usuario
+            loginUser(usuarioContexto);  
             navigate('/user');
         } catch (error) {
             console.error('Error al actualizar el usuario:', error);

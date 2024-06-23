@@ -8,8 +8,8 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
 function CreateAnotacionPage() {
-    const { id } = useParams(); // ID del proyecto al que se añadirá la anotación
-    const { user } = useUser(); // Acceso a los datos del usuario para obtener el ID de usuario
+    const { id } = useParams(); 
+    const { user } = useUser(); 
     const navigate = useNavigate();
 
     const [contenidoAnotacion, setContenidoAnotacion] = useState('');
@@ -19,11 +19,11 @@ function CreateAnotacionPage() {
         try {
             const anotacionData = {
                 ContenidoAnotacion: contenidoAnotacion,
-                id_usuario: user.id_usuario, // Suponiendo que user contiene id_usuario
+                id_usuario: user.id_usuario, 
                 id_proyecto: id
             };
             await axios.post(`https://server-tad-g4.azurewebsites.net/api/anotacion`, anotacionData);
-            navigate(`/project-details/${id}`); // Redirigir al detalle del proyecto después de crear la anotación
+            navigate(`/project-details/${id}`); 
         } catch (error) {
             console.error('Error al crear la anotación:', error);
             alert('Error al crear la anotación');

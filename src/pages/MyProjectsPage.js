@@ -19,7 +19,7 @@ function MyProjectsPage() {
   const obtenerProyectos = useCallback(async () => {
     try {
       const response = await axios.get(`https://server-tad-g4.azurewebsites.net/api/proyectos/mis-proyectos/${user.id_usuario}`);
-      console.log('API response:', response.data);  // Debugging
+      console.log('API response:', response.data); 
       if (response.status === 200) {
         setProyectos(response.data);
       } else {
@@ -32,7 +32,7 @@ function MyProjectsPage() {
 
   useEffect(() => {
     if (user) {
-      console.log('User object:', user);  // Debugging
+      console.log('User object:', user); 
       obtenerProyectos();
     }
     document.body.style.backgroundColor = '#343a40';

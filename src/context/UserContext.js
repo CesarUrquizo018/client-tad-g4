@@ -1,7 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 
-// Creamos el contexto de usuario
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
@@ -11,7 +10,6 @@ export const UserProvider = ({ children }) => {
         const token = localStorage.getItem('token');
         if (token) {
             axios.defaults.headers.common['x-auth-token'] = token;
-            // Puedes realizar una solicitud para obtener los datos del usuario autenticado si es necesario
         }
     }, []);
 

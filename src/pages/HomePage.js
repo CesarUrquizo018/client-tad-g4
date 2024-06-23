@@ -1,17 +1,24 @@
+// src/pages/HomePage.js
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { formatDate } from '../utils/DateUtils';
 import { useUser } from '../context/UserContext';
 import Header from '../components/Header';
+import Modal from 'react-bootstrap/Modal';
 
 import Container from 'react-bootstrap/Container';
 import Table from 'react-bootstrap/Table';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 
 function HomePage() {
   const { user } = useUser();
   const [proyectos, setProyectos] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [mensaje, setMensaje] = useState('');
 
   useEffect(() => {
     obtenerProyectos();
@@ -35,25 +42,30 @@ function HomePage() {
     }
   };
 
-  const enviarSolicitud = async (id_proyecto) => {
+  const enviarSolicitud = async () => {
     try {
       const nuevaSolicitud = {
         id_usuario: user.id_usuario,
-        id_proyecto: id_proyecto,
-        id_estado: 1,  // Estado "En espera"
-        fecha_solicitud: new Date().toISOString().slice(0, 10),
-        mensaje: "Solicitud enviada"
+        id_proyecto: selectedProject,
+        mensaje
       };
 
       const response = await axios.post(`https://server-tad-g4.azurewebsites.net/api/solicitudes`, nuevaSolicitud);
       if (response.status === 201) {
         alert('Solicitud enviada exitosamente');
+        setShowModal(false);
+        setMensaje('');
       } else {
         console.error('Error al enviar la solicitud');
       }
     } catch (error) {
       console.error('Error al enviar la solicitud:', error);
     }
+  };
+
+  const handleSendRequest = (projectId) => {
+    setSelectedProject(projectId);
+    setShowModal(true);
   };
 
   return (
@@ -87,9 +99,34 @@ function HomePage() {
                 </tr>
               </tbody>
             </Table>
-            <Button variant="primary" onClick={() => enviarSolicitud(proyecto.id_proyecto)}>ENVIAR SOLICITUD</Button>          </Card.Body>
+            <Button variant="primary" onClick={() => handleSendRequest(proyecto.id_proyecto)}>ENVIAR SOLICITUD</Button>
+          </Card.Body>
         </Card>
       ))}
+
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Enviar Solicitud</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group controlId="formMensaje">
+              <Form.Label>Mensaje:</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={mensaje}
+                onChange={(e) => setMensaje(e.target.value)}
+                placeholder="Escribe un mensaje para el propietario del proyecto"
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
+          <Button variant="primary" onClick={enviarSolicitud}>Enviar Solicitud</Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 }

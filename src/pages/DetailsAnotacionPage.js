@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 function DetailsAnotacionPage() {
-    const { id } = useParams(); // ID de la anotación
+    const { id } = useParams(); 
     const navigate = useNavigate();
     const [anotacion, setAnotacion] = useState({
         ContenidoAnotacion: '',

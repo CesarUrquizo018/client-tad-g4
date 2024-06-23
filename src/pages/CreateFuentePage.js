@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 function CreateFuentePage() {
-    const { id } = useParams(); // ID del proyecto al que se añadirá la fuente
+    const { id } = useParams(); 
     const navigate = useNavigate();
 
     const [nombreFuente, setNombreFuente] = useState('');
@@ -29,10 +29,10 @@ function CreateFuentePage() {
                 NombreFuente: nombreFuente,
                 URLFuente: urlFuente,
                 FechaPublicacion: fechaPublicacion,
-                id_proyecto: id // Asumiendo que tienes el ID del proyecto desde los parámetros
+                id_proyecto: id 
             };
             await axios.post(`https://server-tad-g4.azurewebsites.net/api/fuente`, fuenteData);
-            navigate(`/project-details/${id}`); // Redirigir al detalle del proyecto después de crear la fuente
+            navigate(`/project-details/${id}`); 
         } catch (error) {
             console.error('Error al crear la fuente:', error);
         }

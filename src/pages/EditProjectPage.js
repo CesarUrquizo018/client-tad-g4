@@ -30,10 +30,10 @@ function EditProjectPage() {
       }
     };
     fetchProyecto();
-    document.body.style.backgroundColor = '#343a40';  // Aplica el fondo oscuro
+    document.body.style.backgroundColor = '#343a40'; 
 
     return () => {
-        document.body.style.backgroundColor = '';  // Restablece al estilo predeterminado al salir
+        document.body.style.backgroundColor = ''; 
     };
   }, [id]);
 
@@ -42,7 +42,7 @@ function EditProjectPage() {
     try {
       const proyecto = { titulo, descripcion, ciclo, curso };
       await axios.put(`https://server-tad-g4.azurewebsites.net/api/proyectos/${id}`, proyecto);
-      navigate('/myprojects'); // Redirigir al usuario a la lista de sus proyectos después de actualizar
+      navigate('/myprojects'); 
     } catch (error) {
       console.error('Error al actualizar el proyecto:', error);
     }

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { useParams, Link} from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { formatDate } from '../utils/DateUtils';
 import { useUser } from '../context/UserContext';
 
@@ -20,7 +20,7 @@ function DetailsProjectPage() {
     const [loading, setLoading] = useState(true);
     //const navigate = useNavigate();
 
-    const obtenerProyecto = async () => {
+    const obtenerProyecto = useCallback(async () => {
         try {
             const response = await axios.get(`https://server-tad-g4.azurewebsites.net/api/proyectos/${id}`);
             if (response.status === 200) {
@@ -31,9 +31,9 @@ function DetailsProjectPage() {
         } catch (error) {
             console.error('Error al obtener los detalles del proyecto:', error);
         }
-    };
+    }, [id]);
 
-    const obtenerFuentes = async () => {
+    const obtenerFuentes = useCallback(async () => {
         try {
             const response = await axios.get(`https://server-tad-g4.azurewebsites.net/api/fuente/proyecto/${id}`);
             if (response.status === 200) {
@@ -44,9 +44,9 @@ function DetailsProjectPage() {
         } catch (error) {
             console.error('Error al obtener las fuentes:', error);
         }
-    };
+    }, [id]);
 
-    const obtenerAnotaciones = async () => {
+    const obtenerAnotaciones = useCallback(async () => {
         try {
             const response = await axios.get(`https://server-tad-g4.azurewebsites.net/api/anotacion/proyecto/${id}`);
             if (response.status === 200) {
@@ -57,9 +57,9 @@ function DetailsProjectPage() {
         } catch (error) {
             console.error('Error al obtener las anotaciones:', error);
         }
-    };
+    }, [id]);
 
-    const obtenerOtros = async () => {
+    const obtenerOtros = useCallback(async () => {
         try {
             const response = await axios.get(`https://server-tad-g4.azurewebsites.net/api/otro/proyecto/${id}`);
             if (response.status === 200) {
@@ -70,9 +70,9 @@ function DetailsProjectPage() {
         } catch (error) {
             console.error('Error al obtener los otros:', error);
         }
-    };
+    }, [id]);
 
-    const obtenerMiembros = async () => {
+    const obtenerMiembros = useCallback(async () => {
         try {
             const response = await axios.get(`https://server-tad-g4.azurewebsites.net/api/proyectos/${id}/miembros`);
             if (response.status === 200) {
@@ -83,7 +83,7 @@ function DetailsProjectPage() {
         } catch (error) {
             console.error('Error al obtener los miembros del proyecto:', error);
         }
-    };
+    }, [id]);
 
     useEffect(() => {
         const fetchData = async () => {

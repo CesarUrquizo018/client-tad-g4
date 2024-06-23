@@ -18,7 +18,7 @@ function DetailsProjectPage() {
     const [otros, setOtros] = useState([]);
     const [miembros, setMiembros] = useState([]);
     const [loading, setLoading] = useState(true);
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -36,7 +36,7 @@ function DetailsProjectPage() {
         return () => {
             document.body.style.backgroundColor = '';
         };
-    }, [id]);
+    }, [id, obtenerProyecto, obtenerFuentes, obtenerAnotaciones, obtenerOtros, obtenerMiembros]);
 
     const obtenerProyecto = async () => {
         try {

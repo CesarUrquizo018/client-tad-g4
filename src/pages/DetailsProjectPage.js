@@ -20,24 +20,6 @@ function DetailsProjectPage() {
     const [loading, setLoading] = useState(true);
     //const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchData = async () => {
-            await obtenerProyecto();
-            await obtenerFuentes();
-            await obtenerAnotaciones();
-            await obtenerOtros();
-            await obtenerMiembros();
-            setLoading(false);
-        };
-
-        fetchData();
-        document.body.style.backgroundColor = '#343a40';
-
-        return () => {
-            document.body.style.backgroundColor = '';
-        };
-    }, [id, obtenerProyecto, obtenerFuentes, obtenerAnotaciones, obtenerOtros, obtenerMiembros]);
-
     const obtenerProyecto = async () => {
         try {
             const response = await axios.get(`https://server-tad-g4.azurewebsites.net/api/proyectos/${id}`);
@@ -102,6 +84,24 @@ function DetailsProjectPage() {
             console.error('Error al obtener los miembros del proyecto:', error);
         }
     };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            await obtenerProyecto();
+            await obtenerFuentes();
+            await obtenerAnotaciones();
+            await obtenerOtros();
+            await obtenerMiembros();
+            setLoading(false);
+        };
+
+        fetchData();
+        document.body.style.backgroundColor = '#343a40';
+
+        return () => {
+            document.body.style.backgroundColor = '';
+        };
+    }, [id, obtenerProyecto, obtenerFuentes, obtenerAnotaciones, obtenerOtros, obtenerMiembros]);
 
     if (loading) {
         return <div>Cargando...</div>;

@@ -1,5 +1,3 @@
-// src/pages/RequestPage.js
-
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { useUser } from '../context/UserContext';
@@ -20,10 +18,10 @@ function RequestPage() {
 
   const obtenerSolicitudes = useCallback(async () => {
     try {
-      const response = await axios.get(`https://server-tad-g4.azurewebsites.net/api/solicitudes`);
+      const response = await axios.get('https://server-tad-g4.azurewebsites.net/api/solicitudes');
       if (response.status === 200) {
-        const userReceivedRequests = response.data.filter(solicitud => solicitud.id_proyecto_owner === user.id_usuario);
-        const userSentRequests = response.data.filter(solicitud => solicitud.id_usuario === user.id_usuario);
+        const userReceivedRequests = response.data.filter(solicitud => solicitud.id_receptor === user.id_usuario);
+        const userSentRequests = response.data.filter(solicitud => solicitud.id_remitente === user.id_usuario);
 
         setReceivedRequests(userReceivedRequests);
         setSentRequests(userSentRequests);

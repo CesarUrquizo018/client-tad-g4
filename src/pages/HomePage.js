@@ -1,23 +1,20 @@
-// src/pages/HomePage.js
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { formatDate } from '../utils/DateUtils';
 import { useUser } from '../context/UserContext';
 import Header from '../components/Header';
 import Modal from 'react-bootstrap/Modal';
-
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import Table from 'react-bootstrap/Table';
 import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 
 function HomePage() {
   const { user } = useUser();
   const [proyectos, setProyectos] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [selectedProject, setSelectedProject] = useState(null);
+  const [currentProject, setCurrentProject] = useState(null);
   const [mensaje, setMensaje] = useState('');
 
   useEffect(() => {
@@ -31,7 +28,7 @@ function HomePage() {
 
   const obtenerProyectos = async () => {
     try {
-      const response = await axios.get(`https://server-tad-g4.azurewebsites.net/api/proyectos`);
+      const response = await axios.get('https://server-tad-g4.azurewebsites.net/api/proyectos');
       if (response.status === 200) {
         setProyectos(response.data);
       } else {
@@ -45,16 +42,18 @@ function HomePage() {
   const enviarSolicitud = async () => {
     try {
       const nuevaSolicitud = {
-        id_usuario: user.id_usuario,
-        id_proyecto: selectedProject,
+        id_remitente: user.id_usuario,
+        id_receptor: currentProject.id_usuario,
+        id_proyecto: currentProject.id_proyecto,
+        id_estado: 1,
+        fecha_solicitud: new Date().toISOString().slice(0, 10),
         mensaje
       };
 
-      const response = await axios.post(`https://server-tad-g4.azurewebsites.net/api/solicitudes`, nuevaSolicitud);
+      const response = await axios.post('https://server-tad-g4.azurewebsites.net/api/solicitudes', nuevaSolicitud);
       if (response.status === 201) {
         alert('Solicitud enviada exitosamente');
         setShowModal(false);
-        setMensaje('');
       } else {
         console.error('Error al enviar la solicitud');
       }
@@ -63,9 +62,14 @@ function HomePage() {
     }
   };
 
-  const handleSendRequest = (projectId) => {
-    setSelectedProject(projectId);
+  const handleOpenModal = (project) => {
+    setCurrentProject(project);
     setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setMensaje('');
   };
 
   return (
@@ -73,12 +77,10 @@ function HomePage() {
       <Header />
       <h1 className="mb-4 text-white">Proyectos</h1>
       {proyectos.map(proyecto => (
-        <Card key={proyecto.id_proyecto} className="mb-3" >
-          <Card.Body >
+        <Card key={proyecto.id_proyecto} className="mb-3">
+          <Card.Body>
             <Card.Title>{proyecto.titulo}</Card.Title>
-            <Card.Text>
-              {proyecto.descripcion}
-            </Card.Text>
+            <Card.Text>{proyecto.descripcion}</Card.Text>
             <Table striped bordered hover size="sm" variant="secondary">
               <tbody>
                 <tr>
@@ -99,32 +101,34 @@ function HomePage() {
                 </tr>
               </tbody>
             </Table>
-            <Button variant="primary" onClick={() => handleSendRequest(proyecto.id_proyecto)}>ENVIAR SOLICITUD</Button>
+            <Button variant="primary" onClick={() => handleOpenModal(proyecto)}>ENVIAR SOLICITUD</Button>
           </Card.Body>
         </Card>
       ))}
-
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
+      <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>Enviar Solicitud</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group controlId="formMensaje">
-              <Form.Label>Mensaje:</Form.Label>
+            <Form.Group controlId="mensaje">
+              <Form.Label>Mensaje</Form.Label>
               <Form.Control
                 as="textarea"
                 rows={3}
                 value={mensaje}
                 onChange={(e) => setMensaje(e.target.value)}
-                placeholder="Escribe un mensaje para el propietario del proyecto"
               />
             </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
-          <Button variant="primary" onClick={enviarSolicitud}>Enviar Solicitud</Button>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Cancelar
+          </Button>
+          <Button variant="primary" onClick={enviarSolicitud}>
+            Enviar
+          </Button>
         </Modal.Footer>
       </Modal>
     </Container>

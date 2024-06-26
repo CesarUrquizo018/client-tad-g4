@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { formatDate } from '../utils/DateUtils';
 import { useUser } from '../context/UserContext';
@@ -17,6 +17,20 @@ function HomePage() {
   const [currentProject, setCurrentProject] = useState(null);
   const [mensaje, setMensaje] = useState('');
 
+  const obtenerProyectos = useCallback(async () => {
+    try {
+      const response = await axios.get('https://server-tad-g4.azurewebsites.net/api/proyectos');
+      if (response.status === 200) {
+        const proyectosFiltrados = response.data.filter(proyecto => proyecto.id_usuario !== user.id_usuario);
+        setProyectos(proyectosFiltrados);
+      } else {
+        console.error('Error al obtener los proyectos');
+      }
+    } catch (error) {
+      console.error('Error al obtener los proyectos:', error);
+    }
+  }, [user.id_usuario]);
+
   useEffect(() => {
     obtenerProyectos();
     document.body.style.backgroundColor = '#343a40';
@@ -24,26 +38,12 @@ function HomePage() {
     return () => {
       document.body.style.backgroundColor = '';
     };
-  }, []);
-
-  const obtenerProyectos = async () => {
-    try {
-      const response = await axios.get('https://server-tad-g4.azurewebsites.net/api/proyectos');
-      if (response.status === 200) {
-        setProyectos(response.data);
-      } else {
-        console.error('Error al obtener los proyectos');
-      }
-    } catch (error) {
-      console.error('Error al obtener los proyectos:', error);
-    }
-  };
+  }, [obtenerProyectos]);
 
   const enviarSolicitud = async () => {
     try {
       const nuevaSolicitud = {
         id_remitente: user.id_usuario,
-        id_receptor: currentProject.id_usuario,
         id_proyecto: currentProject.id_proyecto,
         id_estado: 1,
         fecha_solicitud: new Date().toISOString().slice(0, 10),
@@ -81,26 +81,28 @@ function HomePage() {
           <Card.Body>
             <Card.Title>{proyecto.titulo}</Card.Title>
             <Card.Text>{proyecto.descripcion}</Card.Text>
-            <Table striped bordered hover size="sm" variant="secondary">
-              <tbody>
-                <tr>
-                  <td>ID</td>
-                  <td>{proyecto.id_proyecto}</td>
-                </tr>
-                <tr>
-                  <td>Fecha de creación</td>
-                  <td>{formatDate(proyecto.fecha_creacion)}</td>
-                </tr>
-                <tr>
-                  <td>Ciclo</td>
-                  <td>{proyecto.ciclo}</td>
-                </tr>
-                <tr>
-                  <td>Curso</td>
-                  <td>{proyecto.curso}</td>
-                </tr>
-              </tbody>
-            </Table>
+            <div className="table-responsive">
+              <Table striped bordered hover size="sm" variant="secondary">
+                <tbody>
+                  <tr>
+                    <td>ID</td>
+                    <td>{proyecto.id_proyecto}</td>
+                  </tr>
+                  <tr>
+                    <td>Fecha de creación</td>
+                    <td>{formatDate(proyecto.fecha_creacion)}</td>
+                  </tr>
+                  <tr>
+                    <td>Ciclo</td>
+                    <td>{proyecto.ciclo}</td>
+                  </tr>
+                  <tr>
+                    <td>Curso</td>
+                    <td>{proyecto.curso}</td>
+                  </tr>
+                </tbody>
+              </Table>
+            </div>
             <Button variant="primary" onClick={() => handleOpenModal(proyecto)}>ENVIAR SOLICITUD</Button>
           </Card.Body>
         </Card>

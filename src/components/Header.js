@@ -32,7 +32,7 @@ const Header = () => {
         alignRight
         variant="secondary"
       >
-        <Dropdown.Item as={Link} to="/user">Usuario</Dropdown.Item>
+        <Dropdown.Item as={Link} to="/user">Ver Perfil</Dropdown.Item>
         <Dropdown.Item onClick={handleLogout}>Cerrar Sesión</Dropdown.Item>
       </DropdownButton>
     </Navbar>

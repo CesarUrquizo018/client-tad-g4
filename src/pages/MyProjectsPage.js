@@ -3,8 +3,8 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { formatDate } from '../utils/DateUtils';
 import { useUser } from '../context/UserContext';
-import agregarProyectoImg from '../images/agregarProyecto.png';
 import Header from '../components/Header';
+import Loading from '../components/Loading';
 
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
@@ -14,12 +14,12 @@ import Table from 'react-bootstrap/Table';
 function MyProjectsPage() {
   const { user } = useUser();
   const [proyectos, setProyectos] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const obtenerProyectos = useCallback(async () => {
     try {
       const response = await axios.get(`https://server-tad-g4.azurewebsites.net/api/proyectos/mis-proyectos/${user.id_usuario}`);
-      console.log('API response:', response.data); 
       if (response.status === 200) {
         setProyectos(response.data);
       } else {
@@ -27,12 +27,13 @@ function MyProjectsPage() {
       }
     } catch (error) {
       console.error('Error al obtener los proyectos:', error);
+    } finally {
+      setLoading(false);
     }
   }, [user.id_usuario]);
 
   useEffect(() => {
     if (user) {
-      console.log('User object:', user); 
       obtenerProyectos();
     }
     document.body.style.backgroundColor = '#343a40';
@@ -66,13 +67,17 @@ function MyProjectsPage() {
     navigate(`/project-details/${id}`);
   };
 
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
     <Container className="mt-4 bg-dark text-white">
       <Header />
       <h1 className="mb-4">Mis Proyectos</h1>
       <Link to="/create-project">
         <Button variant="primary" className="mb-3">
-          Crear Proyecto <img src={agregarProyectoImg} alt="Agregar Proyecto" style={{ width: 30, marginLeft: 10 }} />
+          Crear Proyecto
         </Button>
       </Link>
       

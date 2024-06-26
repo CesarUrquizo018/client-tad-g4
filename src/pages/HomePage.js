@@ -3,6 +3,7 @@ import axios from 'axios';
 import { formatDate } from '../utils/DateUtils';
 import { useUser } from '../context/UserContext';
 import Header from '../components/Header';
+import Loading from '../components/Loading';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -16,6 +17,7 @@ function HomePage() {
   const [showModal, setShowModal] = useState(false);
   const [currentProject, setCurrentProject] = useState(null);
   const [mensaje, setMensaje] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const obtenerProyectos = useCallback(async () => {
     try {
@@ -28,6 +30,8 @@ function HomePage() {
       }
     } catch (error) {
       console.error('Error al obtener los proyectos:', error);
+    } finally {
+      setLoading(false);
     }
   }, [user.id_usuario]);
 
@@ -72,6 +76,10 @@ function HomePage() {
     setMensaje('');
   };
 
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
     <Container className="mt-4 bg-dark text-white">
       <Header />
@@ -81,28 +89,30 @@ function HomePage() {
           <Card.Body>
             <Card.Title>{proyecto.titulo}</Card.Title>
             <Card.Text>{proyecto.descripcion}</Card.Text>
-            <div className="table-responsive">
-              <Table striped bordered hover size="sm" variant="secondary">
-                <tbody>
-                  <tr>
-                    <td>ID</td>
-                    <td>{proyecto.id_proyecto}</td>
-                  </tr>
-                  <tr>
-                    <td>Fecha de creación</td>
-                    <td>{formatDate(proyecto.fecha_creacion)}</td>
-                  </tr>
-                  <tr>
-                    <td>Ciclo</td>
-                    <td>{proyecto.ciclo}</td>
-                  </tr>
-                  <tr>
-                    <td>Curso</td>
-                    <td>{proyecto.curso}</td>
-                  </tr>
-                </tbody>
-              </Table>
-            </div>
+            <Table striped bordered hover size="sm" variant="secondary">
+              <tbody>
+                <tr>
+                  <td>ID</td>
+                  <td>{proyecto.id_proyecto}</td>
+                </tr>
+                <tr>
+                  <td>Fecha de creación</td>
+                  <td>{formatDate(proyecto.fecha_creacion)}</td>
+                </tr>
+                <tr>
+                  <td>Ciclo</td>
+                  <td>{proyecto.ciclo}</td>
+                </tr>
+                <tr>
+                  <td>Curso</td>
+                  <td>{proyecto.curso}</td>
+                </tr>
+                <tr>
+                  <td>Creador</td>
+                  <td>{proyecto.creador?.nombre}</td> {/* Mostrar el nombre del creador */}
+                </tr>
+              </tbody>
+            </Table>
             <Button variant="primary" onClick={() => handleOpenModal(proyecto)}>ENVIAR SOLICITUD</Button>
           </Card.Body>
         </Card>

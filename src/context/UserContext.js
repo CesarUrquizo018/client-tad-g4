@@ -10,6 +10,7 @@ export const UserProvider = ({ children }) => {
         const token = localStorage.getItem('token');
         if (token) {
             axios.defaults.headers.common['x-auth-token'] = token;
+            // Aquí podrías agregar lógica para obtener el usuario actual si tienes un endpoint para eso
         }
     }, []);
 

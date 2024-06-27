@@ -109,7 +109,7 @@ function HomePage() {
                 </tr>
                 <tr>
                   <td>Creador</td>
-                  <td>{proyecto.creador?.nombre}</td> {/* Mostrar el nombre del creador */}
+                  <td>{proyecto.creador?.nombre}</td>
                 </tr>
               </tbody>
             </Table>

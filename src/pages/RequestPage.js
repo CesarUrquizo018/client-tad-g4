@@ -105,7 +105,7 @@ function RequestPage() {
               <Card key={solicitud.id_solicitud} className="mb-3">
                 <Card.Body>
                   <Card.Title>Solicitud ID: {solicitud.id_solicitud}</Card.Title>
-                  <Card.Text><strong>Proyecto:</strong> {solicitud.proyecto ? solicitud.proyecto.titulo : 'Sin título'}</Card.Text>
+                  <Card.Text><strong>Proyecto:</strong> {solicitud.proyecto.titulo}</Card.Text>
                   <Card.Text><strong>Mensaje:</strong> {solicitud.mensaje}</Card.Text>
                   <Card.Text><strong>Fecha de Solicitud:</strong> {formatDate(solicitud.fecha_solicitud)}</Card.Text>
                   <Card.Text><strong>Estado:</strong> {solicitud.id_estado === 2 ? 'Aceptado' : solicitud.id_estado === 3 ? 'Rechazado' : 'En espera'}</Card.Text>

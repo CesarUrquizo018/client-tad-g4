@@ -16,6 +16,8 @@ function RequestPage() {
   const { user } = useUser();
   const [receivedRequests, setReceivedRequests] = useState([]);
   const [sentRequests, setSentRequests] = useState([]);
+  const [receivedHistory, setReceivedHistory] = useState([]);
+  const [sentHistory, setSentHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
   const [variant, setVariant] = useState('');
@@ -24,11 +26,15 @@ function RequestPage() {
     try {
       const response = await axios.get('https://server-tad-g4.azurewebsites.net/api/solicitudes');
       if (response.status === 200) {
-        const userReceivedRequests = response.data.filter(solicitud => solicitud.id_receptor === user.id_usuario);
-        const userSentRequests = response.data.filter(solicitud => solicitud.id_remitente === user.id_usuario);
+        const userReceivedRequests = response.data.filter(solicitud => solicitud.id_receptor === user.id_usuario && solicitud.id_estado === 1);
+        const userSentRequests = response.data.filter(solicitud => solicitud.id_remitente === user.id_usuario && solicitud.id_estado === 1);
+        const userReceivedHistory = response.data.filter(solicitud => solicitud.id_receptor === user.id_usuario && solicitud.id_estado !== 1);
+        const userSentHistory = response.data.filter(solicitud => solicitud.id_remitente === user.id_usuario && solicitud.id_estado !== 1);
 
         setReceivedRequests(userReceivedRequests);
         setSentRequests(userSentRequests);
+        setReceivedHistory(userReceivedHistory);
+        setSentHistory(userSentHistory);
       } else {
         console.error('Error al obtener las solicitudes');
       }
@@ -89,7 +95,25 @@ function RequestPage() {
           {message}
         </Alert>
       )}
-      <Tabs defaultActiveKey="received" className="mb-3">
+      <Tabs defaultActiveKey="sent" className="mb-3">
+        <Tab eventKey="sent" title="Enviadas">
+          <h1 className="mb-4">Mis Solicitudes Enviadas</h1>
+          {sentRequests.length === 0 ? (
+            <p>No has enviado ninguna solicitud</p>
+          ) : (
+            sentRequests.map(solicitud => (
+              <Card key={solicitud.id_solicitud} className="mb-3">
+                <Card.Body>
+                  <Card.Title>Solicitud ID: {solicitud.id_solicitud}</Card.Title>
+                  <Card.Text><strong>Proyecto:</strong> {solicitud.proyecto ? solicitud.proyecto.titulo : 'Sin título'}</Card.Text>
+                  <Card.Text><strong>Mensaje:</strong> {solicitud.mensaje}</Card.Text>
+                  <Card.Text><strong>Fecha de Solicitud:</strong> {formatDate(solicitud.fecha_solicitud)}</Card.Text>
+                  <Card.Text><strong>Estado:</strong> {solicitud.id_estado === 2 ? 'Aceptado' : solicitud.id_estado === 3 ? 'Rechazado' : 'En espera'}</Card.Text>
+                </Card.Body>
+              </Card>
+            ))
+          )}
+        </Tab>
         <Tab eventKey="received" title="Recibidas">
           <h1 className="mb-4">Solicitudes Recibidas</h1>
           {receivedRequests.length === 0 ? (
@@ -99,7 +123,7 @@ function RequestPage() {
               <Card key={solicitud.id_solicitud} className="mb-3">
                 <Card.Body>
                   <Card.Title>Solicitud ID: {solicitud.id_solicitud}</Card.Title>
-                  <Card.Text><strong>Proyecto:</strong> {solicitud.proyecto_titulo}</Card.Text>
+                  <Card.Text><strong>Proyecto:</strong> {solicitud.proyecto ? solicitud.proyecto.titulo : 'Sin título'}</Card.Text>
                   <Card.Text><strong>Mensaje:</strong> {solicitud.mensaje}</Card.Text>
                   <Card.Text><strong>Fecha de Solicitud:</strong> {formatDate(solicitud.fecha_solicitud)}</Card.Text>
                   <Card.Text><strong>Estado:</strong> {solicitud.id_estado === 2 ? 'Aceptado' : solicitud.id_estado === 3 ? 'Rechazado' : 'En espera'}</Card.Text>
@@ -114,34 +138,33 @@ function RequestPage() {
             ))
           )}
         </Tab>
-        <Tab eventKey="sent" title="Enviadas">
-          <h1 className="mb-4">Mis Solicitudes Enviadas</h1>
-          {sentRequests.length === 0 ? (
-            <p>No has enviado ninguna solicitud</p>
+        <Tab eventKey="history" title="Historial">
+          <h1 className="mb-4">Historial de Solicitudes</h1>
+          <h2>Enviadas</h2>
+          {sentHistory.length === 0 ? (
+            <p>No hay historial de solicitudes enviadas</p>
           ) : (
-            sentRequests.map(solicitud => (
+            sentHistory.map(solicitud => (
               <Card key={solicitud.id_solicitud} className="mb-3">
                 <Card.Body>
                   <Card.Title>Solicitud ID: {solicitud.id_solicitud}</Card.Title>
-                  <Card.Text><strong>Proyecto:</strong> {solicitud.proyecto_titulo}</Card.Text>
+                  <Card.Text><strong>Proyecto:</strong> {solicitud.proyecto ? solicitud.proyecto.titulo : 'Sin título'}</Card.Text>
                   <Card.Text><strong>Mensaje:</strong> {solicitud.mensaje}</Card.Text>
                   <Card.Text><strong>Fecha de Solicitud:</strong> {formatDate(solicitud.fecha_solicitud)}</Card.Text>
-                  <Card.Text><strong>Estado:</strong> {solicitud.id_estado === 2 ? 'Aceptado' : solicitud.id_estado === 3 ? 'Rechazado' : 'En espera'}</Card.Text>
+                  <Card.Text><strong>Estado:</strong> {solicitud.id_estado === 2 ? 'Aceptado' : 'Rechazado'}</Card.Text>
                 </Card.Body>
               </Card>
             ))
           )}
-        </Tab>
-        <Tab eventKey="history" title="Historial">
-          <h1 className="mb-4">Historial de Solicitudes</h1>
-          {receivedRequests.concat(sentRequests).filter(solicitud => solicitud.id_estado !== 1).length === 0 ? (
-            <p>No hay historial de solicitudes</p>
+          <h2>Recibidas</h2>
+          {receivedHistory.length === 0 ? (
+            <p>No hay historial de solicitudes recibidas</p>
           ) : (
-            receivedRequests.concat(sentRequests).filter(solicitud => solicitud.id_estado !== 1).map(solicitud => (
+            receivedHistory.map(solicitud => (
               <Card key={solicitud.id_solicitud} className="mb-3">
                 <Card.Body>
                   <Card.Title>Solicitud ID: {solicitud.id_solicitud}</Card.Title>
-                  <Card.Text><strong>Proyecto:</strong> {solicitud.proyecto_titulo}</Card.Text>
+                  <Card.Text><strong>Proyecto:</strong> {solicitud.proyecto ? solicitud.proyecto.titulo : 'Sin título'}</Card.Text>
                   <Card.Text><strong>Mensaje:</strong> {solicitud.mensaje}</Card.Text>
                   <Card.Text><strong>Fecha de Solicitud:</strong> {formatDate(solicitud.fecha_solicitud)}</Card.Text>
                   <Card.Text><strong>Estado:</strong> {solicitud.id_estado === 2 ? 'Aceptado' : 'Rechazado'}</Card.Text>

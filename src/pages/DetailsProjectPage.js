@@ -8,6 +8,7 @@ import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
+import Table from 'react-bootstrap/Table';
 
 function DetailsProjectPage() {
     const { user } = useUser();
@@ -18,7 +19,6 @@ function DetailsProjectPage() {
     const [otros, setOtros] = useState([]);
     const [miembros, setMiembros] = useState([]);
     const [loading, setLoading] = useState(true);
-    //const navigate = useNavigate();
 
     const obtenerProyecto = useCallback(async () => {
         try {
@@ -74,7 +74,7 @@ function DetailsProjectPage() {
 
     const obtenerMiembros = useCallback(async () => {
         try {
-            const response = await axios.get(`https://server-tad-g4.azurewebsites.net/api/proyectos/${id}/miembros`);
+            const response = await axios.get(`https://server-tad-g4.azurewebsites.net/api/miembros_proyecto/${id}`);
             if (response.status === 200) {
                 setMiembros(response.data);
             } else {
@@ -114,7 +114,9 @@ function DetailsProjectPage() {
     return (
         <Container className="mt-4 bg-dark text-white">
             <Card className="bg-dark text-white border-0">
-                <Card.Header as="h1">{proyecto.titulo}</Card.Header>
+                <Card.Header as="h1" className="text-center">
+                    {proyecto.titulo}
+                </Card.Header>
                 <Card.Body>
                     <Card.Text>{proyecto.descripcion}</Card.Text>
                     <ListGroup variant="flush" className="bg-dark text-white border-0">
@@ -126,51 +128,86 @@ function DetailsProjectPage() {
                 </Card.Body>
             </Card>
             <Card className="mt-3 bg-dark text-white border-0">
-                <Card.Header as="h2">Miembros del Proyecto</Card.Header>
+                <Card.Header as="h2" className="text-center">Miembros del Proyecto</Card.Header>
                 <ListGroup variant="flush" className="bg-dark text-white border-0">
                     {miembros.map(miembro => (
                         <ListGroup.Item key={miembro.id_usuario} className="bg-dark text-white border-0">
-                            {miembro.nombre} ({miembro.email})
+                            {miembro.usuario.nombre} ({miembro.usuario.email})
                         </ListGroup.Item>
                     ))}
                 </ListGroup>
             </Card>
             <Card className="mt-3 bg-dark text-white border-0">
-                <Card.Header as="h2">Fuentes</Card.Header>
-                <ListGroup variant="flush" className="bg-dark text-white border-0">
-                    {fuentes.map(fuente => (
-                        <ListGroup.Item key={fuente.id_fuente} className="bg-dark text-white border-0 d-flex justify-content-between align-items-center">
-                            <div>
-                                {fuente.NombreFuente} - {fuente.URLFuente} - {formatDate(fuente.FechaPublicacion)}
-                            </div>
-                        </ListGroup.Item>
-                    ))}
-                </ListGroup>
+                <Card.Header as="h2" style={{ display: 'flex', justifyContent: 'space-between' }}>Fuentes
+                    <Button variant="info" as={Link} to={`/project-details/${id}/fuente`} className="ms-2">Agregar / Editar</Button>
+                </Card.Header>
+                <Card.Body>
+                    <Table striped bordered hover variant="dark">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>URL</th>
+                                <th>Fecha de Publicación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {fuentes.map(fuente => (
+                                <tr key={fuente.id_fuente}>
+                                    <td>{fuente.NombreFuente}</td>
+                                    <td><a href={fuente.URLFuente} target="_blank" rel="noopener noreferrer">{fuente.URLFuente}</a></td>
+                                    <td>{formatDate(fuente.FechaPublicacion)}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </Table>
+                </Card.Body>
             </Card>
             <Card className="mt-3 bg-dark text-white border-0">
-                <Card.Header as="h2">Anotaciones</Card.Header>
-                <ListGroup variant="flush" className="bg-dark text-white border-0">
-                    {anotaciones.map(anotacion => (
-                        <ListGroup.Item key={anotacion.id_anotacion} className="bg-dark text-white border-0 d-flex justify-content-between align-items-center">
-                            <div>
-                                {anotacion.ContenidoAnotacion} - {user.nombre}
-                            </div>
-                        </ListGroup.Item>
-                    ))}
-                </ListGroup>
+                <Card.Header as="h2" style={{ display: 'flex', justifyContent: 'space-between' }}> Anotaciones
+                    <Button variant="info" as={Link} to={`/project-details/${id}/anotacion`} className="ms-2"> Agregar / Editar </Button>
+                </Card.Header>
+                <Card.Body>
+                    <Table striped bordered hover variant="dark">
+                        <thead>
+                            <tr>
+                                <th>Usuario</th>
+                                <th>Contenido</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {anotaciones.map(anotacion => (
+                                <tr key={anotacion.id_anotacion}>
+                                    <td>{user.nombre}</td>
+                                    <td>{anotacion.ContenidoAnotacion}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </Table>
+                </Card.Body>
             </Card>
             <Card className="mt-3 bg-dark text-white border-0">
-                <Card.Header as="h2">Otros Recursos</Card.Header>
-                <ListGroup variant="flush" className="bg-dark text-white border-0">
-                    {otros.map(otro => (
-                        <ListGroup.Item key={otro.id_otro} className="bg-dark text-white border-0 d-flex justify-content-between align-items-center">
-                            <div>
-                                {otro.NombreOtro} - {otro.DescripcionOtro}
-                            </div>
-                        </ListGroup.Item>
-                    ))}
-                </ListGroup>
-            </Card>
+                <Card.Header as="h2" style={{ display: 'flex', justifyContent: 'space-between' }}> Otros Recursos
+                    <Button variant="info" as={Link} to={`/project-details/${id}/otro`} className="ms-2">Agregar / Editar</Button>
+                </Card.Header>
+                <Card.Body>
+                    <Table striped bordered hover variant="dark">
+                    <thead>
+                        <tr>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {otros.map(otro => (
+                        <tr key={otro.id_otro}>
+                            <td>{otro.NombreOtro}</td>
+                            <td>{otro.DescripcionOtro}</td>
+                        </tr>
+                        ))}
+                    </tbody>
+                    </Table>
+                </Card.Body>
+                </Card>
             <div className="mt-3">
                 <Button variant="primary" as={Link} to="/myprojects">Volver a mis proyectos</Button>
             </div>
